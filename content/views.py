@@ -6,9 +6,6 @@ from rest_framework.views import APIView
 from .models import Feed, Reply, Like, Bookmark
 from user.models import User
 from djangoProject.settings import MEDIA_ROOT
-from django.http import HttpResponseRedirect
-from django.contrib.auth import get_user_model
-
 
 class Main(APIView):
     def get(self,request):
@@ -28,7 +25,7 @@ class Main(APIView):
         for feed in feed_object_list:
             user = User.objects.filter(email=feed.email).first()
             reply_object_list = Reply.objects.filter(feed_id=feed.id)
-            reply_list =[]
+            reply_list = []
             for reply in reply_object_list:
                 user = User.objects.filter(email=reply.email).first()
                 reply_list.append(dict(reply_content=reply.reply_content,
@@ -47,6 +44,9 @@ class Main(APIView):
                                   is_marked=is_marked
                                   ))
         return render(request, "djangoproject/main.html", context=dict(feed_list=feed_list, user=user))
+
+
+
 
 class UploadFeed(APIView):
     def post(self,request):

@@ -12,7 +12,7 @@ class Like(models.Model):
     is_like = models.BooleanField(default=True)
 
 class Reply(models.Model):
-    feed_id = models.TextField()  # 글내용
+    feed_id =models.IntegerField(default=0)  # 글내용
     email = models.EmailField(default='')
     reply_content = models.TextField()
 

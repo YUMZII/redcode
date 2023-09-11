@@ -29,7 +29,7 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="f22ddc1c-cd66-4730-8b54-c3cc9ae1a83b">
-      <console name="Connection" type="STANDARD" schema="main" session="Main" />
+      <console name="Connection" type="STANDARD" schema="main" session="Main"><![CDATA[SHOW DATABASS]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
@@ -39,11 +39,14 @@
     <connection id="f22ddc1c-cd66-4730-8b54-c3cc9ae1a83b" />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="f22ddc1c-cd66-4730-8b54-c3cc9ae1a83b" dataset="main.content_like" active-filter-id="" />
     <filter-actions connection-id="f22ddc1c-cd66-4730-8b54-c3cc9ae1a83b" dataset="main.content_feed" active-filter-id="aaa5ca04-a94c-4fea-8114-52a47cdc402e">
       <filter id="aaa5ca04-a94c-4fea-8114-52a47cdc402e" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
         <condition column="id" operator="=" value="" active="true" />
       </filter>
     </filter-actions>
+    <filter-actions connection-id="f22ddc1c-cd66-4730-8b54-c3cc9ae1a83b" dataset="main.auth_group_permissions" active-filter-id="" />
+    <filter-actions connection-id="f22ddc1c-cd66-4730-8b54-c3cc9ae1a83b" dataset="main.User" active-filter-id="" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />

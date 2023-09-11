@@ -22,7 +22,7 @@ class Join(APIView):
         User.objects.create(email=email,
                             nickname=nickname,
                             name=name,
-                            password= make_password(password),
+                            password=make_password(password),
                             profile="default_profile.jpg")
 
         return Response(status=200)
@@ -36,10 +36,10 @@ class Login(APIView):
         email = request.data.get('email', None)
         password = request.data.get('password', None)
 
-        user =User.objects.filter(email=email).first()
+        user = User.objects.filter(email=email).first()
 
         if user is None:
-            return Response(status=404, data=dict(message="회원정보가 잘못되었습니다."))
+            return Response(status=400, data=dict(message="회원정보가 잘못되었습니다."))
 
         if user.check_password(password):
         # TODO 로그인을 했다. 세션 OR 쿠키
