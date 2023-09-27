@@ -111,6 +111,9 @@
       .mine{
           margin-left: auto;
       }
+      {#.favorite material-symbols-outlined {#}
+      {#    font-variation-settings: 'FILL' 1#}
+      {#}#}
 
   </style>
 {#      <script>#}
@@ -192,12 +195,13 @@
                   </div>
 
                   <div><img style="width: 100%" src="{% get_media_prefix %}{{ feed.image }}"></div>
+
             <div class="fonts"
                    style="margin: 5px; display: flex; flex-direction: row; justify-content: space-between;">
                   <div style="word-spacing: 7px;">
                       <span id="favorite_{{ feed.id }}" feed_id="{{ feed.id }}" class="favorite material-symbols-outlined" style="color: red;cursor: pointer">
                           {% if feed.is_liked %}
-                              favorite
+                               favorite
                           {% else %}
                               favorite_border
                           {% endif %}
@@ -217,12 +221,12 @@
                   <b>{{ feed.like_count }}명</b>이 좋아합니다.
               </div>
               <div style="margin-left: 13px; text-align: left; font-size: 14px;">
-                  <b>{{ feed.nickname }}</b>{{ feed.content }}</div>
+                  <b>{{ feed.nickname }}</b>   {{ feed.content }}</div>
 
               <div id="reply_list_{{ feed.id }}">
                   {% for reply in feed.reply_list %}
                       <div style="margin-left: 13px; text-align: left; font-size: 14px;">
-                          <b>{{ reply.nickname }}</b>{{ reply.reply_content }}</div>
+                          <b>{{ reply.nickname }}</b>   {{ reply.reply_content }}</div>
                   {% endfor %}
               </div>
 
@@ -256,12 +260,12 @@
           <div style=" color: grey">chat GPT: 무엇이 궁금한가요? </div>
           </div>
           <div class = "chat-content">
-              <div class = "line">
+              <!--<div class = "line">
                   <span class = "chat-box">...</span>
               </div>
               <div class ="line">
                   <span class = "chat-box mine">...</span>
-              </div>
+              </div>-->
           </div>
           <input class="chat-box" id="input">
           <button id = "send" class="btn btn-light">send a message</button>
@@ -318,42 +322,51 @@
       </div>
   </div>
 
-  {#대화창  JavaScript - papago번역기눙 추가#}
-  <script src="https://cdn.jsdelivr.net/npm/axios@1.1.3/dist/axios.min.js"></script>
-  <script type="module">
-      import {Configuration, OpenAIApi} from 'https://api.openai.com/v1/chat/completions';
+  {#대화창  JavaScript - papago번역기눙 추가 #}
+{#  <script src="https://cdn.jsdelivr.net/npm/axios@1.1.3/dist/axios.min.js"></script>#}
+<script type="module">
+    document.querySelector('#send').addEventListener('click', function () {
+        var template = `<div class="line">
+            <span class="chat-box mine">${document.querySelector('#input').value}</span>
+        </div>`;
+        document.querySelector('.chat-content').insertAdjacentHTML('beforeend', template);
 
-      document.querySelector('#send').addEventListener('click', function () {
-          var template = `<div class="line">
-              <span class ="chat-box mine">${document.querySelector('#input').value}
-              </span>
-          </div>`
-          document.querySelector('.chat-content').insertAdjacentHTML('beforeend', template);
+        const apiKey = ''; // 여기에 자신의 API 키를 넣어주세요.
+        const promptText = document.querySelector('#input').value;
 
-          const configuration = new Configuration({
-              apiKey: '', //키 입력
-          });
-          const openai = new OpenAIApi(configuration);
+        const model = "text-davinci-003"; // 사용할 모델을 지정합니다.
+        //const language = "ko";
 
-          openai.createCompletion({
-              model: "text-davinci-003",
-              prompt: document.querySelector('#input').value, //INPUT에 입력된 글자가 AI로 넘어감
-              temperature: 0.7,
-              max_tokens: 64, //허용가능한 tokens의 최대
-              top_p: 1.0,
-              frequency_penalty: 0.0,
-              presence_penalty: 0.0,
-          }).then((result)=>{ //그리고 답변을 받는데 그게 result에 들어감
-              console.log(result.data.choices[0].text) //AI가 답변한게 들어옴
-               var template = `<div class="line">
-              <span class ="chat-box">${ result.data.choices[0].text}
-              </span>
-          </div>`
-          document.querySelector('.chat-content').insertAdjacentHTML('beforeend', template);
-              //AI가 답장이 HTML창에 생성되도록 만들어주는 코드
-          })
-      })
-  </script>
+        fetch(`https://api.openai.com/v1/engines/${model}/completions`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`, // API 키를 요청 헤더에 추가합니다.
+            },
+            body: JSON.stringify({
+                prompt: `You are a helpful assistant.\nUser: ${promptText}\n`,
+                max_tokens: 64,
+                //language,
+            }),
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.choices && result.choices[0]) {
+                const responseText = result.choices[0].text;
+                var template = `<div class="line">
+                    <span class="chat-box">${responseText}</span>
+                </div>`;
+                document.querySelector('.chat-content').insertAdjacentHTML('beforeend', template);
+            } else {
+                console.error('API 응답에서 유효한 데이터를 찾을 수 없습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('API 요청 중 오류 발생', error);
+        });
+    });
+</script>
+
 
   <!-- Optional JavaScript; choose one of the two! 원래 있던 제이쿼리-->
   <script>
